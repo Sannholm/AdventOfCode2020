@@ -1,5 +1,29 @@
 use itertools::Itertools;
 
+fn main() {
+    let part1 = INPUT
+        .split('\n')
+        .map(str::parse::<i32>)
+        .map(Result::unwrap)
+        .tuple_combinations::<(_, _)>()
+        .find(|(x, y)| x + y == 2020)
+        .map(|(x, y)| x * y)
+        .unwrap();
+
+    println!("{:?}", part1);
+
+    let part2 = INPUT
+        .split('\n')
+        .map(str::parse::<i32>)
+        .map(Result::unwrap)
+        .tuple_combinations::<(_, _, _)>()
+        .find(|(x, y, z)| x + y + z == 2020)
+        .map(|(x, y, z)| x * y * z)
+        .unwrap();
+
+    println!("{:?}", part2);
+}
+
 const INPUT: &str = "1632
 1438
 1811
@@ -200,27 +224,3 @@ const INPUT: &str = "1632
 1869
 1469
 1507";
-
-fn main() {
-    let part1 = INPUT
-        .split('\n')
-        .map(str::parse::<i32>)
-        .map(Result::unwrap)
-        .tuple_combinations::<(_, _)>()
-        .find(|(x, y)| x + y == 2020)
-        .map(|(x, y)| x * y)
-        .unwrap();
-
-    println!("{:?}", part1);
-
-    let part2 = INPUT
-        .split('\n')
-        .map(str::parse::<i32>)
-        .map(Result::unwrap)
-        .tuple_combinations::<(_, _, _)>()
-        .find(|(x, y, z)| x + y + z == 2020)
-        .map(|(x, y, z)| x * y * z)
-        .unwrap();
-
-    println!("{:?}", part2);
-}
