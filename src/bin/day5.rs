@@ -21,19 +21,47 @@ fn binary_walk(steps: &[bool], range: (u32, u32)) -> u32 {
         .0;
 }
 
-fn main() {
-    let seat_ids = INPUT
+// Original
+fn find_seat_ids() -> Vec<u32> {
+    INPUT
         .lines()
         .map(|l| {
-            let (left, right) = l.split_at(7);
-            let row = binary_walk(&left.chars().map(|c| c == 'B').collect_vec()[..], (0, 127));
-            let col = binary_walk(&right.chars().map(|c| c == 'R').collect_vec()[..], (0, 7));
+            let row = binary_walk(
+                l[..7].chars().map(|c| c == 'B').collect_vec().as_slice(),
+                (0, 127),
+            );
+            let col = binary_walk(
+                l[7..].chars().map(|c| c == 'R').collect_vec().as_slice(),
+                (0, 7),
+            );
             row * 8 + col
         })
-        .collect_vec();
+        .collect_vec()
+}
+
+// Simpler alternative (inspired by @guspihl and @Caagr98)
+fn find_seat_ids_alternative() -> Vec<u32> {
+    INPUT
+        .replace("F", "0")
+        .replace("B", "1")
+        .replace("L", "0")
+        .replace("R", "1")
+        .lines()
+        .map(|l| {
+            let row = u32::from_str_radix(&l[..7], 2).unwrap();
+            let col = u32::from_str_radix(&l[7..], 2).unwrap();
+            row * 8 + col
+        })
+        .collect_vec()
+}
+
+fn main() {
+    assert_eq!(find_seat_ids(), find_seat_ids_alternative());
+
+    let seat_ids = find_seat_ids_alternative();
 
     // Part 1
-    let part1 = seat_ids.iter().max().unwrap();
+    let part1 = seat_ids.iter().max();
     println!("{:?}", part1);
 
     // Part 2
